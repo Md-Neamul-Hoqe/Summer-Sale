@@ -18,25 +18,28 @@ let totalPrice = 0,
 
 productsSide.addEventListener("click", function (clickEvent) {
   const card = clickEvent.target.closest(".card");
-  const title = card.querySelector(".card-title").innerText;
+  if (card) {
+    console.log(card);
+    const title = card.querySelector(".card-title").innerText;
 
-  const priceString = card.querySelector(".price").innerText;
-  const price = parseFloat(priceString);
-  totalPrice += price;
+    const priceString = card.querySelector(".price").innerText;
+    const price = parseFloat(priceString);
+    totalPrice += price;
 
-  /* button disabled/enabled */
-  if (totalPrice >= 200) {
-    couponApplyBtn.classList.remove("btn-disabled");
+    /* button disabled/enabled */
+    if (totalPrice >= 200) {
+      couponApplyBtn.classList.remove("btn-disabled");
+    }
+    if (totalPrice > 0) {
+      purchaseBtn.classList.remove("btn-disabled");
+    }
+
+    /* Cart Output Show */
+    const list = document.createElement("li");
+    orderList.appendChild(list).innerText = title;
+    totalPriceElement.innerText = totalPrice.toFixed(2);
+    grandTotalElement.innerText = (totalPrice - discount).toFixed(2);
   }
-  if (totalPrice > 0) {
-    purchaseBtn.classList.remove("btn-disabled");
-  }
-
-  /* Cart Output Show */
-  const list = document.createElement("li");
-  orderList.appendChild(list).innerText = title;
-  totalPriceElement.innerText = totalPrice.toFixed(2);
-  grandTotalElement.innerText = (totalPrice - discount).toFixed(2);
 });
 
 /* Coupon validation */
@@ -45,11 +48,12 @@ couponApplyBtn.addEventListener("click", function () {
   console.log(userCoupon);
   if (coupon === userCoupon) {
     discount = totalPrice * 0.2;
-    console.log(discount);
 
     /* Cart Output Update for discount */
     discountElement.innerText = discount.toFixed(2);
     grandTotalElement.innerText = (totalPrice - discount).toFixed(2);
+  } else {
+    return alert("Sorry! This coupon has no discount yiet.");
   }
 });
 
